@@ -1,0 +1,25 @@
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Local environment / credentials
+.env
+*.db
+*.sqlite
+*.sqlitedb
+
+# Ignore data exports or backups
+/data/
+*.csv
+*.json
+*.xlsx
+
+# Notes or drafts
+notes/
+*.md.bak
