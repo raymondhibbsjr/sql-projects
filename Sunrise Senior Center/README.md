@@ -1,77 +1,67 @@
-# Sunrise Senior Center Database Project
+# SSC Property Management Database Project
 
-This project represents the **Sunrise Senior Center (SSC) Database**, designed to manage residents, staff, programs, and facility resources.  
-It demonstrates relational database design, population, and querying using **Microsoft SQL Server Management Studio (SSMS) 19**.
+This project models a **Property and Service Coordination System (SSC)** designed to manage property owners, residents, maintenance offices, and service requests.  
+It demonstrates comprehensive SQL database development — including schema design, data population, and analytical querying — using **Microsoft SQL Server Management Studio (SSMS) 19**.
 
 ---
 
 ## Project Overview
 
-The Sunrise Senior Center database models a realistic senior living center workflow, including:
+The SSC database simulates a real-world property management company. It tracks:
+- Ownership, rental properties, and office operations  
+- Tenant and maintenance service data  
+- Service categories and request tracking  
+- Recursive relationships and SQL Views for simplified data retrieval  
 
-- Resident information and room assignments  
-- Staff assignments and program responsibilities  
-- Program schedules and participation tracking  
-- Facility rooms and resource management  
-
-The database is fully normalized and includes referential integrity across all relationships.
+This project highlights both **database design fundamentals** and **advanced SQL querying techniques**.
 
 ---
 
 ## Files Included
 
 | File | Description |
-|------|-------------|
-| `SSC_Create DB.sql` | Defines all database tables, primary keys, and foreign key relationships. Drops existing tables for a clean build. |
-| `SSC_Insert Data.sql` | Populates the SSC database with example data for residents, staff, programs, rooms, and enrollments. |
-| `SSC_Single Table Queries.sql` | Contains exercises that demonstrate **basic SQL querying techniques** on individual tables, including selecting columns, filtering with `WHERE`, ordering results, aggregations like `COUNT` and `AVG`, and simple calculations. |
-| `SSC_Single Table Subqueries.sql` | Demonstrates **advanced querying techniques** using subqueries, expressions, and calculated fields to extract information across multiple tables or perform conditional analysis, including filtering by aggregated data and using `IN` with nested queries. |
+|------|--------------|
+| `SSC_Create DB.sql` | Builds the database schema, defines all tables, keys, and referential integrity constraints. |
+| `SSC_Insert Data.sql` | Populates the SSC database with realistic data for owners, properties, offices, service categories, service requests, and residents. |
+| `SSC_Single Table Queries.sql` | Contains single-table query examples demonstrating filtering, sorting, and simple aggregations. |
+| `SSC_Single Table Subqueries.sql` | Includes more advanced examples using subqueries to derive insights from single tables. |
+| `SSC_Recursion and Views.sql` | Demonstrates recursive SQL queries and creation of Views for reusable and hierarchical data access. |
 
 ---
 
 ## Concepts Demonstrated
 
-- Relational database schema design and normalization  
-- Primary and foreign key constraints  
+- Relational database schema design  
+- Table creation with primary and foreign keys  
 - Referential integrity enforcement  
-- Data population using realistic sample values  
-- Use of `DROP TABLE IF EXISTS` for re-runnable scripts  
-- Data organization for residents, staff, programs, and facility management  
-- Service tracking and program participation modeling  
-- **Basic SQL querying techniques**:  
-  - Selecting columns with `SELECT`  
-  - Filtering with `WHERE` and logical operators  
-  - Sorting results with `ORDER BY`  
-  - Aggregation with `COUNT`, `SUM`, `AVG`, `MIN`, `MAX`  
-- **Advanced SQL querying techniques**:  
-  - Subqueries using `IN`, `EXISTS`, and nested `SELECT` statements  
-  - Filtering and aggregation based on subquery results  
-  - Using calculated fields and expressions (`MONTHLY_FEE * 12`, `MONTHLY_RENT / SQR_FT`)  
-- Querying multiple tables with `JOIN` for relational insights  
+- Data insertion using realistic sample records  
+- Single-table queries and filtering logic  
+- Subqueries and derived result sets  
+- Recursive queries and hierarchical relationships  
+- Creation and use of **SQL Views** for simplified analysis  
+- Data organization for property, tenant, and maintenance management  
 
 ---
 
 ## Database Entities
 
 | Table | Description |
-|-------|-------------|
-| **RESIDENTS** | Stores residents’ personal information, room assignments, and program participation. |
-| **STAFF** | Contains staff members, their roles, and program or room assignments. |
-| **PROGRAMS** | Lists activities and schedules available to residents. |
-| **ROOMS** | Tracks facility rooms, capacities, and resource allocations. |
-| **ENROLLMENTS** | Links residents to the programs they participate in. |
-| **STAFF_ASSIGNMENTS** | Tracks staff assignments to programs and rooms. |
+|--------|--------------|
+| **OWNER / PROPOWNER** | Property owner contact and address information. |
+| **PROPERTY** | Property listings with square footage, layout, and rent details. |
+| **OFFICE** | Property management offices overseeing different regions. |
+| **SERVICE_CATEGORY** | Categories of available maintenance and repair services. |
+| **SERVICE_REQUEST** | Records of service issues, their descriptions, and repair status. |
+| **RESIDENTS** | List of tenants associated with each property. |
 
 ---
 
 ## Example Query
 
 ```sql
--- Find all residents enrolled in the 'Yoga' program along with their assigned room
-SELECT r.FIRST_NAME, r.LAST_NAME, p.PROGRAM_NAME, rm.ROOM_NUMBER
-FROM RESIDENTS r
-JOIN ENROLLMENTS e ON r.RESIDENT_ID = e.RESIDENT_ID
-JOIN PROGRAMS p ON e.PROGRAM_ID = p.PROGRAM_ID
-JOIN ROOMS rm ON r.ROOM_ID = rm.ROOM_ID
-WHERE p.PROGRAM_NAME = 'Yoga'
-ORDER BY r.LAST_NAME, r.FIRST_NAME;
+-- Retrieve each office and the total number of service requests assigned to it
+SELECT o.OFFICE_NAME, COUNT(s.SERVICE_ID) AS TotalRequests
+FROM OFFICE o
+JOIN SERVICE_REQUEST s ON o.OFFICE_NUM = s.OFFICE_ID
+GROUP BY o.OFFICE_NAME
+ORDER BY TotalRequests DESC;
