@@ -1,6 +1,8 @@
 --Sunrise Senior Center
 --Chapter 3 Textbook Extension B
 --Recursion and Views
+--Raymond Hibbs
+
 USE ONL02_Student3_DB;
 
 
@@ -106,8 +108,8 @@ UPDATE RESIDENTS SET LEASE_TERM_YRS = 5 WHERE RESIDENT_ID = 36;
 UPDATE RESIDENTS SET LEASE_TERM_YRS = 5 WHERE RESIDENT_ID = 37;
 
 
---C. Write an SQL SELECT statement to create a query on the recursive relationship in the RESIDENTS table that shows each resident’s FirstName (as ResFirstName), LastName (as ResLastName) and Property_ID
---followed by the name of the resident who referred him or her to SSC using the referring resident’s FirstName (as ReferrerFirstName) and LastName (as ReferrerLastName).  
+--C. Write an SQL SELECT statement to create a query on the recursive relationship in the RESIDENTS table that shows each residentâ€™s FirstName (as ResFirstName), LastName (as ResLastName) and Property_ID
+--followed by the name of the resident who referred him or her to SSC using the referring residentâ€™s FirstName (as ReferrerFirstName) and LastName (as ReferrerLastName).  
 
 --Do not include residents who were not referred by another customer. 
 
@@ -169,4 +171,5 @@ FROM Referral_List_View
 WHERE ReferrerID IS NOT NULL
 	AND LEASE_TERM_YRS >= 2
 GROUP BY ReferrerID, ReferrerFirstName, ReferrerLastName
+
 ORDER BY TotalReferralBonus DESC, ReferrerLastName;
